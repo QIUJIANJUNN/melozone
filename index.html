@@ -1,28 +1,477 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Melozone</title>
+    <title>Melo星球 - 躺平，享受當下</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #d6f3f2;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
             text-align: center;
-            padding: 50px;
-            background-color: #f0f0f0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: url('melo_bg.jpg') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+        .hero-content {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        .melocoin-image {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background: url('melocoin.png') no-repeat center center;
+            background-size: contain;
+            z-index: 1;
         }
         h1 {
-            color: #333;
+            font-size: 3em;
+            margin-bottom: 20px;
         }
-        a {
+        .cta-button {
+            display: inline-block;
+            background-color: #9fd8df;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
             text-decoration: none;
-            color: #007BFF;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin: 10px;
+        }
+        .cta-button:hover {
+            background-color: #8fc8c9;
+        }
+        section {
+            padding: 100px 0;
+        }
+        .character-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        .character-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .character-card:hover {
+            transform: translateY(-5px);
+        }
+        .character-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .character-info {
+            padding: 15px;
+        }
+        .social-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .social-links a {
+            margin: 0 15px;
+            color: #333;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .character-detail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            z-index: 1000;
+        }
+        .character-detail.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .detail-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        .character-detail.active .detail-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        #story-content {
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        @media (min-width: 768px) {
+            #story-content {
+                max-width: 750px;
+            }
+        }
+        @media (min-width: 1024px) {
+            #story-content {
+                max-width: 900px;
+            }
+        }
+        .section-container {
+            margin: 0 auto;
+            padding: 0 20px; /* 默認較小的內邊距 */
+        }
+
+        @media (min-width: 768px) {
+            .section-container {
+                max-width: 750px;
+                padding: 0 30px; /* 中等屏幕上增加內邊距 */
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .section-container {
+                max-width: 1000px;
+                padding: 0 50px; /* 大屏幕上使用更大的內邊距 */
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Melozone!</h1>
-    <p>This is your static webpage hosted on GitHub.</p>
-    <a href="https://github.com/yourusername/melozone">View on GitHub</a>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#melo-planet">Melo 星球</a></li>
+                <li><a href="#characters">角色介紹</a></li>
+                <li><a href="#community">加入社群</a></li>
+                <li><a href="#contact">聯繫我們</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="melo-planet" class="hero">
+        <div class="hero-content">
+            <h1>Melo 星球：躺平，享受當下</h1>
+            <p>在宇宙的某個角落，存在著一顆獨特而迷人的星球，名叫Melo星球。這裡的居民推崇著種被稱為“躺平哲學”的生活方式，他們追求輕鬆自在，享受當下，而非追逐成就與財富。</p>
+            <a href="#characters" class="cta-button">探索 Melo 星球</a>
+            <a href="#community" class="cta-button">加入我們</a>
+        </div>
+        <div class="melocoin-image"></div>
+    </section>
+
+    <section id="history" class="section-container">
+        <h2>Melo星球歷史</h2>
+        <div id="story-content">
+            <p id="loading">正在加載內容，請稍候...</p>
+            <p id="error" style="display: none; color: red;"></p>
+        </div>
+    </section>
+
+    <section id="characters" class="section-container">
+        <div class="container">
+            <h2>認識 Melo 星人</h2>
+            <p>Melo星人
+                Melo星球的居民被稱為<strong>Melo星人</strong>，他們有一個共同的信念：<strong>躺平比什麼都重要</strong>。每個Melo星人都過著<strong>悠閒的生活</strong>，享受每一刻的<strong>慵懶和自在</strong>。他們共同參與了<strong>"全星球慵懶日"</strong>的活動，用<strong>慵懶和幽默</strong>擊退壓力，保持星球的<strong>平和</strong>。</p>
+
+            <p>Melo星球上的居民們，他們有著獨特的活方式和個性，每個有自己的特點和故事。</p>
+            <div class="character-gallery">
+                <div class="character-card" data-character="fu">
+                    <img src="fu.jpg" alt="阿福大叔">
+                    <div class="character-info">
+                        <h3>阿福大叔 (Fu)</h3>
+                        <p>"人生嘛，能睡就睡，能躺就躺"</p>
+                        <p>阿福大叔擁有特殊技能，能夠隨時進入深度睡眠，並在夢中獲得解決問題的靈感。無論是工作還是生活的挑戰，他都能用睡眠來面對，醒來後找到答案。這一獨特的能力讓他成為星球上的智慧象徵。</p>
+                    </div>
+                </div>
+                <div class="character-card" data-character="lando">
+                    <img src="lando.jpg" alt="藍朵仙女">
+                    <div class="character-info">
+                        <h3>藍朵仙女 (Lando)</h3>
+                        <p>工作？那是啥？</p>
+                        <p>藍朵仙女的愛好是製作果汁，有一次她嘗試調配“終極放鬆果汁”，結果果汁太強大，自己先喝到飄飄欲睡。當她還在空中打盹時，果汁杯掉到了地上，果汁順勢流滿了整個小鎮，大家一碰到果汁就直接進入了懶散模式，連樹上的鳥都打瞌睡。最後，藍朵只好等果汁乾掉。</p>
+                    </div>
+                </div>
+                <div class="character-card" data-character="bai">
+                    <img src="bai.jpg" alt="老白科學家">
+                    <div class="character-info">
+                        <h3>老白科學家 (Dr. Bai)</h3>
+                        <p>實驗不一定要成功，但一定不太累</p>
+                        <p>老白的“懶人帽”是他最自豪的發明之一，這頂帽子一戴上，就會在頭頂形成一個“舒適氣墊”，隨時隨地可以讓你躺下打個盹兒。唯一的缺點是，有時它會突然打開讓你當場倒地，讓人哭笑不得。</p>
+                    </div>
+                </div>
+                <div class="character-card" data-character="mia">
+                    <img src="mia.jpg" alt="米亞寵物大師">
+                    <div class="character-info">
+                        <h3>米亞寵物大師 (Mia)</h3>
+                        <p>放輕鬆，像我的貓一樣深呼吸</p>
+                        <p>米亞的“慵懶樂園”不僅是動物的天堂，也是人類的避風港。無論你有多累，進入樂園後，看著一群貓狗打呼嚕，你就會情不自禁地想跟著它們一起躺平。米亞說：“在這裡，動物會告訴你，什麼叫真正的放鬆。”</p>
+                    </div>
+                </div>
+                <div class="character-card" data-character="tao">
+                    <img src="tao.jpg" alt="阿饕廚神">
+                    <div class="character-info">
+                        <h3>阿饕廚神 (Tao)</h3>
+                        <p>好吃最重要，懶得做也是一種藝術</p>
+                        <p>阿饕一次推出“懶人冰淇淋”的簡單食譜，結果沒控制好步驟，冰淇淋化成了湯。當大家一頭霧水時，他居然堅持道：“這就是我最新的懶人冷湯！美味又省事，喝一口你就會愛上這個‘夏日冰涼’！”</p>
+                    </div>
+                </div>
+                <div class="character-card" data-character="asen">
+                    <img src="asen.jpg" alt="阿森探家">
+                    <div class="character-info">
+                        <h3>阿森探險家 (Asen)</h3>
+                        <p>旅行的意義，在於找到一個完美的休息點</p>
+                        <p>阿森不再收集探險裝備，現在他的收藏清單上都是懶人神器：超級柔軟的枕頭、透氣的懶人椅、快速入睡的眼罩。他不僅測試它們的舒適度，還經常在星球上直播他的“懶人裝備大評測”，並且不時睡著讓粉絲捧腹大笑。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="character-detail" class="character-detail">
+            <div class="detail-content">
+                <!-- 角详情將通過JavaScript動態填充 -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#">Telegram</a>
+                <a href="#">Discord</a>
+                <a href="#">Twitter</a>
+            </div>
+            <p>❤️ 由 Melo星人社區共同構建 ❤️</p>
+            <p>&copy; Melo星球</p>
+        </div>
+    </footer>
+
+    <script>
+        // 添加平滑滾動效果
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        const characterCards = document.querySelectorAll('.character-card');
+        const characterDetail = document.getElementById('character-detail');
+        const detailContent = characterDetail.querySelector('.detail-content');
+
+        characterCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const character = this.dataset.character;
+                showCharacterDetail(character);
+            });
+        });
+
+        function showCharacterDetail(character) {
+            const characterDetails = {
+                fu: {
+                    name: "阿福大叔 (Fu)",
+                    description: "阿福大叔是Melo星球的傳奇人物，也是“躺平哲學”的創始人，被視為全星球的精神領袖。他總是穿著舒適的睡衣，隨時隨地入睡。曾經是星球上最繁忙的商人，日以繼夜地工作，追求成功。然而，在一次重要的國際會議上，他因過度疲憊在發言時睡著了，還打起了響亮的呼嚕，震驚了所有與會者，引發了一陣哄堂大笑。醒來後，他意識到這樣的生活毫無意義，決定改變自己的生活方式，開始倡導“躺平哲學”。他的特殊技能是能隨時進入深度睡眠，並在夢中獲得解決問題的靈感。有時候，他會在重要場合睡得太熟，甚至在頒獎典禮上打呼，引發更多笑料。他的愛好是曬太陽和尋找最柔軟的草地，在陽光下的小憩是他最大的享受。他最喜歡戴著寫“不要煩我”的眼罩，悠閒地躺在草地上。阿福大叔以幽默和隨和的態度影響了整個星球的居民，幫助他們減輕壓力，找到內心的平和。他曾啟發老白科學家 (Dr. Bai) 開發“懶人睡眠輔助器”，也與米亞寵物大師 (Mia) 一起舉辦“人寵共眠”活動，提倡與寵物一起放鬆。他的座右銘是：“人生嘛，能睡就睡，能躺就躺。別讓壓力偷走了你的夢。”",
+                    quote: "人生嘛，能睡就睡，能躺就躺。別讓壓力偷走了你的夢。",
+                    image: "fu_full.jpg"
+                },
+                lando: {
+                    name: "藍朵仙女 (Lando)",
+                    description: "藍朵仙女是Melo星球的心靈治癒師，放鬆與享受生活的代言人。她總是飄浮在空中，手握一杯自製的果汁，宣揚“享受當下”的理念。曾是星球上著名的心理醫生，因為承受過多患者的負面情緒而身心俱疲。在一次旅行中，她偶然感受到自然的寧靜，決定放下工作，擁抱簡單生活。她的特殊技能是釋放“放鬆波”，能讓周圍的人和動物瞬間感到舒適和平靜。她的聲音溫柔動人，總能讓人放鬆下來。藍朵仙女熱愛收集各種果汁配方，享受不同的味道。她的愛好還包括在天空中飄浮，觀察大地的美景。有時她會忘記自己正在釋放“放鬆波”，導致周圍的人突然進入慵懶狀態，發生一些有趣的場面。她與阿森探險家 (Asen) 一起尋找星球上最",
+                    quote: "工作？那是啥？",
+                    image: "lando_full.jpg"
+                },
+                bai: {
+                    name: "老白科學家 (Dr. Bai)",
+                    description: "老白科學家是Melo星球上最隨和的創意研究員，也是懶人科技的開拓者。他總是穿著略微凌亂的實驗袍，手裡拿著一根打瞌睡的鉛筆，因為他常常在懶散中尋找靈感。曾經是個工作狂科學家，為了研究經常熬夜加班。一次實驗失敗後，他累得睡著了，夢中靈感閃現，醒來後發明了第一個懶人機器。然而，他的發明偶爾會鬧出烏龍，例如自動餵食器把食物噴得到處都是，引得大家哈哈大笑。他的特殊技能是“懶人創意發動機”，能在極度放鬆的狀態下想到最具創意的解決方案。他的愛好是養育一些能幫助他減少勞動的機械寵物。他與阿饕廚神 (Tao) 共同研發了自動烹飪機器“懶人鍋”，實現了一鍵烹飪，讓烹飪變得輕鬆簡單。他也為米亞寵物大師 (Mia) 設計了自動餵食器和逗貓棒，讓寵物們也能享受科技帶來的便利。",
+                    quote: "懶不是問題，懶得創新才是問題。",
+                    image: "bai_full.jpg"
+                },
+                mia: {
+                    name: "米亞寵物大師 (Mia)",
+                    description: "米亞是Melo星球寵物大師，總是抱著一隻超肥的貓或懶洋洋的狗。她的特殊技能是與動物心靈相通，能夠理解它們的需求和情緒，並讓它們達到最放鬆的狀態。米亞建立了“慵懶樂園”，提供人和寵物一起享受放鬆的空間。她的愛好是發掘最懶的動物，並與它們一起享受午後時光。有一次，她的寵物們在“寵物放鬆日”上集體打瞌睡，甚至錯過了用餐時間，逗得大家捧腹大笑。她與藍朵仙女 (Lando) 合作舉辦“寵物放鬆日”，結合放鬆波和寵物療法，讓更多人和動物一起放鬆。",
+                    quote: "放輕鬆，像我的貓一樣深呼吸",
+                    image: "mia_full.jpg"
+                },
+                tao: {
+                    name: "阿饕廚神 (Tao)",
+                    description: "阿饕廚神是Melo星球的烹飪大師，也是懶人美食的創造者。他熱愛美食，幽默風趣，有點貪吃，崇尚“吃得好又不費力”。曾在高級餐廳工作，繁瑣的烹飪程序讓他筋疲力盡。在一次烹飪比賽中，因為太累而簡化了菜譜，卻意外獲得好評���這成為他的頓悟時刻。他的特殊技能是“快速美味”，能在極短時間內，使用最少的步驟，準備出美味佳餚。然而，他的懶人料理有時過於簡化，讓人們吃到意想不到的口味，笑稱他的菜是“懶得過頭”的藝術品。他專注於製作“懶人料理”，每道菜只需三步即可完成，並成立了“懶人料理學院”，推廣他的理念。他的愛好是探索各種簡化烹飪的技巧，讓做飯變得更加輕鬆。他與老白科學家 (Dr. Bai) 共同研發了“懶人鍋”，實現了一鍵烹飪。他也為阿福大叔 (Fu) 的“全星球慵懶日”提供美食支持，讓大家在慵懶的同時享受到美味。",
+                    quote: "好吃最重要，懶得做也是一種藝術",
+                    image: "tao_full.jpg"
+                },
+                asen: {
+                    name: "阿森探險家 (Asen)",
+                    description: "阿森是Melo星球的探險家，舒適生活的探索者，致力於尋找並分享最佳的躺平地點和裝備。曾是追求極限的冒險家，經歷多次危險後開始反思人生意義。在一次探險中意外受傷，被迫休息，卻意外發現了放鬆的美妙，這改變了他的生活方向。他的特殊技能是“地點感知”，能夠瞬間感知到一個地方的舒適度，並找到最佳的躺平位置。他的愛好是收集各種各樣的懶人裝備，並測試它們的舒適性。他現在正致力於製作《Melo星球舒適指南》，讓大家都能找到屬於自己的放鬆天地。有時候，他會因為過於放鬆而錯過日落，引發朋友們的調侃。阿森與藍朵仙女 (Lando) 一起尋找最適合釋放“放鬆波”的地點，與米亞寵物大師 (Mia) 發現適合人寵共處的舒適場所。",
+                    quote: "旅行的意義，在於找到一個完美的休息點",
+                    image: "asen_full.jpg"
+                }
+            };
+
+            const details = characterDetails[character];
+            if (details) {
+                detailContent.innerHTML = `
+                    <span class="close-button">&times;</span>
+                    <h2>${details.name}</h2>
+                    <img src="${details.image}" alt="${details.name}" style="max-width: 100%; border-radius: 10px;">
+                    <p>${details.description}</p>
+                    <blockquote>"${details.quote}"</blockquote>
+                `;
+                characterDetail.classList.add('active');
+
+                const closeButton = detailContent.querySelector('.close-button');
+                closeButton.addEventListener('click', closeCharacterDetail);
+            }
+        }
+
+        function closeCharacterDetail() {
+            characterDetail.classList.remove('active');
+        }
+
+        characterDetail.addEventListener('click', (e) => {
+            if (e.target === characterDetail) {
+                closeCharacterDetail();
+            }
+        });
+
+        // 添加以下 JavaScript 代碼到現有的 script 標籤中或創建一個新的 script 標籤
+
+        // 函數用於加載 Markdown 文件
+        function loadMarkdownFile(file, elementId) {
+            console.log('開始加載 Markdown 文件:', file);
+            fetch(file)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    console.log('Markdown 文件加載成功，內容長度:', text.length);
+                    const element = document.getElementById(elementId);
+                    if (!element) {
+                        console.error('找不到元素:', elementId);
+                        return;
+                    }
+                    if (typeof marked === 'undefined') {
+                        console.error('Marked 庫未正確加載');
+                        element.textContent = text;
+                    } else {
+                        element.innerHTML = marked.parse(text);
+                    }
+                })
+                .catch(error => {
+                    console.error('加載 Markdown 文件時出錯:', error);
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.textContent = '加載內容時出錯，請稍後再試。';
+                    }
+                });
+        }
+
+        // 當頁面加載完成時，加載 Markdown 文件
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded 事件觸發');
+            loadMarkdownFile('story_background.md', 'story-content');
+        });
+
+        // 讀取並顯示背景故事
+        const storyContent = document.getElementById('story-content');
+        const loadingElement = document.getElementById('loading');
+        const errorElement = document.getElementById('error');
+
+        fetch('story_background.md')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(text => {
+                const converter = new showdown.Converter();
+                const html = converter.makeHtml(text);
+                loadingElement.style.display = 'none';
+                storyContent.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading story background:', error);
+                loadingElement.style.display = 'none';
+                errorElement.style.display = 'block';
+                errorElement.textContent = `加載內容時出錯：${error.message}。請稍後再試。`;
+            });
+    </script>
+
+    <!-- 添加 Marked 庫用於解析 Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </body>
 </html>
